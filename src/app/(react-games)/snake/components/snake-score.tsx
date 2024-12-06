@@ -9,15 +9,7 @@ import {
 } from "@/components/ui/card";
 import { games } from "@/constants/games";
 import { snakeGame } from "@/stores/snake-game";
-import { GameStatus } from "@/types/game-types";
-
-const GAME_STATUS: Record<GameStatus, string> = {
-	[GameStatus.IDLE]: "Aguardando",
-	[GameStatus.PLAYING]: "Jogando",
-	[GameStatus.PAUSED]: "Pausado",
-	[GameStatus.VICTORY]: "Vitória",
-	[GameStatus.GAME_OVER]: "Derrota",
-};
+import { GAME_STATUS } from "@/types/game-types";
 
 export function SnakeScore() {
 	const gameInfo = games.find((game) => game.id === "snake");

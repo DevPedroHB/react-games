@@ -6,11 +6,25 @@ export enum GameStatus {
 	GAME_OVER = "GAME_OVER", // O jogador perdeu ou o jogo terminou de outra forma.
 }
 
+export const GAME_STATUS: Record<GameStatus, string> = {
+	[GameStatus.IDLE]: "Aguardando",
+	[GameStatus.PLAYING]: "Jogando",
+	[GameStatus.PAUSED]: "Pausado",
+	[GameStatus.VICTORY]: "Vitória",
+	[GameStatus.GAME_OVER]: "Derrota",
+};
+
 export enum GameDifficulty {
 	EASY = "EASY", // Configuração mais acessível, voltada para iniciantes.
 	MEDIUM = "MEDIUM", // Um desafio equilibrado para jogadores intermediários.
 	HARD = "HARD", // Dificuldade alta, destinada a jogadores experientes.
 }
+
+export const GAME_DIFFICULTY: Record<GameDifficulty, string> = {
+	[GameDifficulty.EASY]: "Fácil",
+	[GameDifficulty.MEDIUM]: "Médio",
+	[GameDifficulty.HARD]: "Difícil",
+};
 
 export interface GameCoord {
 	x: number; // Coordenada no eixo X (horizontal).

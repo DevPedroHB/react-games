@@ -1,3 +1,6 @@
+import { SnakeAlertDialogGameOver } from "./components/snake-alert-dialog-game-over";
+import { SnakeAlertDialogPaused } from "./components/snake-alert-dialog-paused";
+import { SnakeAlertDialogVictory } from "./components/snake-alert-dialog-victory";
 import { SnakeBoard } from "./components/snake-board";
 import { SnakeMenu } from "./components/snake-menu";
 import { SnakeScore } from "./components/snake-score";
@@ -8,25 +11,9 @@ export default function Snake() {
 			<SnakeScore />
 			<SnakeBoard />
 			<SnakeMenu />
+			<SnakeAlertDialogVictory />
+			<SnakeAlertDialogGameOver />
+			<SnakeAlertDialogPaused />
 		</main>
 	);
 }
-
-// startGame: () => void;
-// stopGame: () => void;
-// updateDirection: (direction: string) => void;
-// updateSettings: (settings: Partial<ISettings>) => void;
-// resetGame: () => void;
-// addEnergy: () => void;
-// addSize: () => void;
-// moveSnake: () => void;
-// handleKeyPress: (event: React.KeyboardEvent<HTMLDivElement>) => void;
-// handleResize: () => void;
-// generateFood: () => void;
-// updateScore: (energy: number, movements: number, size: number) => void;
-// getHighScore: () => number;
-// setHighScore: (score: number) => void;
-// resetHighScore: () => void;
-// isHighScore: () => boolean;
-// getBestScore: () => number;
-// setBestScore: (score: number) => void;

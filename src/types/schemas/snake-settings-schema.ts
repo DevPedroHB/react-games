@@ -4,8 +4,8 @@ import { GameDifficulty } from "../game-types";
 export const snakeSettingsSchema = z.object({
 	size: z.coerce
 		.number()
-		.min(2, { message: "O tamanho mínimo permitido para 'size' é 2." })
-		.max(40, { message: "O tamanho máximo permitido para 'size' é 40." }),
+		.min(4, { message: "O tamanho mínimo permitido para 'size' é 4." })
+		.max(30, { message: "O tamanho máximo permitido para 'size' é 30." }),
 	difficulty: z.nativeEnum(GameDifficulty),
 });
 

@@ -26,7 +26,11 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { snakeGame } from "@/stores/snake-game";
-import { GameDifficulty } from "@/types/game-types";
+import {
+	GAME_DIFFICULTY,
+	GameDifficulty,
+	GameStatus,
+} from "@/types/game-types";
 import {
 	type SnakeSettingsSchema,
 	snakeSettingsSchema,
@@ -35,17 +39,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useToggle } from "@uidotdev/usehooks";
 import { Pencil, Save } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useHotkeys } from "react-hotkeys-hook";
 import { toast } from "sonner";
 
 export function SnakeSettingsDialog() {
 	const [openModal, setOpenModal] = useToggle(false);
-	const { settings, resetGame } = snakeGame();
+	const { settings, resetGame, status } = snakeGame();
 
 	const form = useForm<SnakeSettingsSchema>({
 		resolver: zodResolver(snakeSettingsSchema),
 		defaultValues: {
 			size: settings.size,
-			difficulty: GameDifficulty.MEDIUM,
+			difficulty: settings.difficulty,
 		},
 	});
 
@@ -56,6 +61,16 @@ export function SnakeSettingsDialog() {
 
 		toast.success("Configurações salvas com sucesso!");
 	}
+
+	useHotkeys(
+		"e",
+		() => {
+			setOpenModal(!openModal);
+		},
+		{
+			enabled: status === GameStatus.IDLE,
+		},
+	);
 
 	return (
 		<Dialog open={openModal} onOpenChange={setOpenModal}>
@@ -84,7 +99,7 @@ export function SnakeSettingsDialog() {
 										<Input
 											type="number"
 											min={4}
-											max={40}
+											max={30}
 											placeholder="Defina uma tamanho"
 											{...field}
 										/>
@@ -111,7 +126,7 @@ export function SnakeSettingsDialog() {
 										<SelectContent>
 											{Object.entries(GameDifficulty).map(([key, value]) => (
 												<SelectItem key={key} value={value}>
-													{value}
+													{GAME_DIFFICULTY[value]}
 												</SelectItem>
 											))}
 										</SelectContent>

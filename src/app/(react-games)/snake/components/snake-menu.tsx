@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -10,19 +9,17 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { snakeGame } from "@/stores/snake-game";
-import { GameDifficulty, GameStatus } from "@/types/game-types";
-import { Pause, Play, RotateCcw } from "lucide-react";
+import { GAME_DIFFICULTY, GameStatus } from "@/types/game-types";
 import { useHotkeys } from "react-hotkeys-hook";
 import { SnakeSettingsDialog } from "./snake-settings-dialog";
 
 export function SnakeMenu() {
-	const { settings, status, startGame, pauseGame, resumeGame, resetGame } =
-		snakeGame();
+	const { settings, status, startGame, resetGame } = snakeGame();
 
 	function handleResetGame() {
 		resetGame({
 			size: settings.size,
-			difficulty: GameDifficulty.MEDIUM,
+			difficulty: settings.difficulty,
 		});
 	}
 
@@ -30,18 +27,8 @@ export function SnakeMenu() {
 		enabled: status === GameStatus.IDLE,
 	});
 
-	useHotkeys(
-		"p",
-		() => {
-			status === GameStatus.PAUSED ? resumeGame() : pauseGame();
-		},
-		{
-			enabled: status === GameStatus.PLAYING || status === GameStatus.PAUSED,
-		},
-	);
-
 	useHotkeys("r", handleResetGame, {
-		enabled: status !== GameStatus.IDLE,
+		enabled: status === GameStatus.VICTORY || status === GameStatus.GAME_OVER,
 	});
 
 	return (
@@ -54,6 +41,12 @@ export function SnakeMenu() {
 				<div className="flex items-center gap-2">
 					<CardTitle>Tamanho:</CardTitle>
 					<CardDescription>{settings.size}</CardDescription>
+				</div>
+				<div className="flex items-center gap-2">
+					<CardTitle>Dificuldade:</CardTitle>
+					<CardDescription>
+						{GAME_DIFFICULTY[settings.difficulty]}
+					</CardDescription>
 				</div>
 				<div className="flex items-center gap-2">
 					<CardTitle>Velocidade:</CardTitle>
@@ -69,32 +62,7 @@ export function SnakeMenu() {
 				</div>
 			</CardContent>
 			<CardFooter className="gap-2">
-				{status === GameStatus.IDLE ? (
-					<SnakeSettingsDialog />
-				) : (
-					<Button type="button" onClick={handleResetGame} className="flex-1">
-						<RotateCcw className="size-4" />
-						Reiniciar
-					</Button>
-				)}
-				{status === GameStatus.IDLE && (
-					<Button type="button" onClick={startGame} className="flex-1">
-						<Play className="size-4" />
-						Iniciar
-					</Button>
-				)}
-				{status === GameStatus.PLAYING && (
-					<Button type="button" onClick={pauseGame} className="flex-1">
-						<Pause className="size-4" />
-						Pausar
-					</Button>
-				)}
-				{status === GameStatus.PAUSED && (
-					<Button type="button" onClick={resumeGame} className="flex-1">
-						<Play className="size-4" />
-						Continuar
-					</Button>
-				)}
+				<SnakeSettingsDialog />
 			</CardFooter>
 		</Card>
 	);
