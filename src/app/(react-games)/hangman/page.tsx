@@ -8,6 +8,7 @@ import {
 import { games } from "@/constants/games";
 import type { Metadata } from "next";
 import { HangmanAlertDialogGameOver } from "./components/hangman-alert-dialog-game-over";
+import { HangmanAlertDialogStart } from "./components/hangman-alert-dialog-start";
 import { HangmanAlertDialogVictory } from "./components/hangman-alert-dialog-victory";
 import { HangmanBody } from "./components/hangman-body";
 import { HangmanDisplay } from "./components/hangman-display";
@@ -23,7 +24,7 @@ export default function Hangman() {
 	if (!gameInfo) return;
 
 	return (
-		<main className="mx-auto max-w-7xl p-4">
+		<main className="mx-auto max-w-5xl p-4">
 			<Card>
 				<CardHeader>
 					<CardTitle>{gameInfo.title}</CardTitle>
@@ -35,6 +36,7 @@ export default function Hangman() {
 				</CardContent>
 				<HangmanKeyboard />
 			</Card>
+			<HangmanAlertDialogStart />
 			<HangmanAlertDialogVictory />
 			<HangmanAlertDialogGameOver />
 		</main>

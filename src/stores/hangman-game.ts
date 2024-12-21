@@ -3,37 +3,15 @@ import { fakerPT_BR as faker } from "@faker-js/faker";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-export const LETTERS = [
-	"a",
-	"b",
-	"c",
-	"d",
-	"e",
-	"f",
-	"g",
-	"h",
-	"i",
-	"j",
-	"k",
-	"l",
-	"m",
-	"n",
-	"o",
-	"p",
-	"q",
-	"r",
-	"s",
-	"t",
-	"u",
-	"v",
-	"w",
-	"x",
-	"y",
-	"z",
-	"ç",
-];
+export const HangmanThemes = {
+	Pessoas: () => faker.person.fullName(),
+	Animais: () => faker.animal.cat(),
+	Comidas: () => faker.food.dish(),
+	Cidades: () => faker.location.city(),
+};
 
 interface IHangmanGame {
+	theme: keyof typeof HangmanThemes;
 	word: string;
 	normalizedWord: string;
 	showWord: string;
@@ -45,19 +23,30 @@ interface IHangmanGame {
 interface IHangmanGameFunctions {
 	startGame: () => void;
 	resetGame: () => void;
+	changeTheme: (theme: keyof typeof HangmanThemes) => void;
 	guessLetter: (letter: string) => void;
 }
 
 export const hangmanGame = create<IHangmanGame & IHangmanGameFunctions>()(
 	immer((set) => ({
-		...initGame(),
+		...initGame("Pessoas"),
 		startGame() {
 			set((state) => {
 				state.status = GameStatus.PLAYING;
 			});
 		},
 		resetGame() {
-			set(() => initGame());
+			set(() => initGame("Pessoas"));
+		},
+		changeTheme(theme) {
+			set((state) => {
+				const word = HangmanThemes[theme]();
+
+				state.theme = theme;
+				state.word = word;
+				state.normalizedWord = normalizeString(word);
+				state.showWord = showWord(word);
+			});
 		},
 		guessLetter(letter) {
 			set((state) => {
@@ -95,21 +84,18 @@ export const hangmanGame = create<IHangmanGame & IHangmanGameFunctions>()(
 	})),
 );
 
-function initGame(): IHangmanGame {
-	const word = faker.person.fullName();
+function initGame(theme: keyof typeof HangmanThemes): IHangmanGame {
+	const word = HangmanThemes[theme]();
 	const normalizedWord = normalizeString(word);
 
 	return {
+		theme,
 		word,
 		normalizedWord,
-		showWord: word
-			.replace(".", "")
-			.split("")
-			.map((char) => (char === " " ? " " : "_"))
-			.join(""),
+		showWord: showWord(word),
 		lives: 6,
 		guesses: [],
-		status: GameStatus.PLAYING,
+		status: GameStatus.IDLE,
 	};
 }
 
@@ -119,4 +105,12 @@ function normalizeString(str: string): string {
 		.replace(/[\u0300-\u036f]/g, "")
 		.replace(/[^a-zA-Z\s]/g, "")
 		.toLowerCase();
+}
+
+function showWord(word: string) {
+	return word
+		.replace(".", "")
+		.split("")
+		.map((char) => (char === " " ? " " : "_"))
+		.join("");
 }

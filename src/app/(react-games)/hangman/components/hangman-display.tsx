@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useHotkeys } from "react-hotkeys-hook";
 
 export function HangmanDisplay() {
-	const { startGame, status, resetGame, showWord } = hangmanGame();
+	const { startGame, status, resetGame, theme, showWord } = hangmanGame();
 	const router = useRouter();
 
 	useHotkeys("space", startGame, {
@@ -29,7 +29,7 @@ export function HangmanDisplay() {
 
 	return (
 		<div className="flex flex-1 flex-col items-center justify-center gap-4">
-			<h2 className="text-xl">Dica: Nome de uma pessoa</h2>
+			<h2 className="text-xl">Tema: {theme}</h2>
 			<p className="text-4xl tracking-widest">{showWord}</p>
 		</div>
 	);
